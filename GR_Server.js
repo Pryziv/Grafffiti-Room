@@ -45,6 +45,7 @@ var my_server = http.createServer(function(request, response) {
       //handle GET requests as static file requests
       var filePath = ROOT_DIR + urlObj.pathname;
       if(urlObj.pathname === '/') filePath = ROOT_DIR + '/page.html';
+
           //response.writeHead(200, {'Content-Type': get_mime(filePath)});
           //response.end(data);
       });
