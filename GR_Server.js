@@ -6,7 +6,7 @@ var url = require('url');  //to parse url strings
 var counter = 1000; //to count invocations of function(req,res)
 
 //var canvas=document.getElementById("canvas1");
-var ROOT_DIR = 'html'; //dir to serve static files from
+var ROOT_DIR = 'client'; //dir to serve static files from
 
 var MIME_TYPES = {
     'css': 'text/css',
@@ -34,17 +34,31 @@ var get_mime = function(filename) {
 };
 
 var my_server = http.createServer(function(request, response) {
-  response.writeHead(200, {"Content-Type": "text/html"});
-  response.write('<!DOCTYPE "html">');
-  response.write("<html>");
-  response.write("<head>");
-  response.write("<title>Grafeetee-Rume</title>");
-  response.write("</head>");
-  response.write("<body>");
-  response.write("Sup son");
-  response.write("</body>");
-  response.write("</html>");
-  response.end();
+  var urlObj = url.parse(request.url, true, false);
+  console.log('\n============================');
+  console.log("PATHNAME: " + urlObj.pathname);
+  console.log("REQUEST: " + ROOT_DIR + urlObj.pathname);
+  console.log("METHOD: " + request.method);
+
+  if(request.method == "GET"){
+      //handle GET requests as static file requests
+      var filePath = ROOT_DIR + urlObj.pathname;
+      if(urlObj.pathname === '/') filePath = ROOT_DIR + '/page.html';
+
+      fs.readFile(filePath, function(err,data){
+          if(err){
+              //report error to console
+              console.log('ERROR: ' + JSON.stringify(err));
+              //respond with not found 404 to client
+              response.writeHead(404);
+              response.end(JSON.stringify(err));
+              return;
+          }
+          response.writeHead(200, {'Content-Type': get_mime(filePath)});
+          response.end(data);
+      });
+  }
+
 }).listen(3000);
 
 console.log('Server Running at http://127.0.0.1:3000  CNTL-C to quit');
