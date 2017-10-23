@@ -35,7 +35,7 @@ var get_mime = function(filename) {
 
 var my_server = http.createServer(function(request, response) {
   response.writeHead(200, {"Content-Type": "text/html"});
-  response.write("<!DOCTYPE "html">");
+  response.write('<!DOCTYPE "html">');
   response.write("<html>");
   response.write("<head>");
   response.write("<title>Grafeetee-Rume</title>");
@@ -45,4 +45,6 @@ var my_server = http.createServer(function(request, response) {
   response.write("</body>");
   response.write("</html>");
   response.end();
-});
+}).listen(3000);
+
+console.log('Server Running at http://127.0.0.1:3000  CNTL-C to quit');
