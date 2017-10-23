@@ -1,5 +1,4 @@
 //Server Code
-/Server Code
 var http = require('http'); //need to http
 var fs = require('fs'); //need to read static files
 var url = require('url');  //to parse url strings
