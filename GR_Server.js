@@ -45,8 +45,17 @@ var my_server = http.createServer(function(request, response) {
       var filePath = ROOT_DIR + urlObj.pathname;
       if(urlObj.pathname === '/') filePath = ROOT_DIR + '/page.html';
 
-          //response.writeHead(200, {'Content-Type': get_mime(filePath)});
-          //response.end(data);
+      fs.readFile(filePath, function(err,data){
+          if(err){
+              //report error to console
+              console.log('ERROR: ' + JSON.stringify(err));
+              //respond with not found 404 to client
+              response.writeHead(404);
+              response.end(JSON.stringify(err));
+              return;
+          }
+          response.writeHead(200, {'Content-Type': get_mime(filePath)});
+          response.end(data);
       });
   }
 
