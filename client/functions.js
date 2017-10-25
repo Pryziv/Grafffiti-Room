@@ -1,3 +1,4 @@
+
 //functions file
 window.onload = function() {//Wait for page to load then do the following
 var canvas = document.getElementById('canvas1');
@@ -9,3 +10,4 @@ imageObj.onload = function() {//Wait for image to load then make the background
       };
 imageObj.src ="images/Wall.jpg";
 };
+
