@@ -65,6 +65,12 @@ var handleMouseDown = function(e){
     document.addEventListener("mouseup", handleMouseUp, true);
   e.stopPropagation();
   e.preventDefault();
+  var dataObj = {canvasX, canvasY,brushSize,brushColour};
+  var jsonString = JSON.stringify(dataObj);
+  $.post("BrushData",jsonString, function(data,status){
+    console.log("data: "+data);
+    console.log("typeof: " + typeof data);
+  })
   paint(canvasX, canvasY);
 }
 
@@ -74,6 +80,12 @@ var handleMouseMove = function(e){
   var canvasX = e.clientX - rect.left;
   var canvasY = e.clientY - rect.top;
   e.stopPropagation();
+  var dataObj = {canvasX, canvasY,brushSize,brushColour};
+  var jsonString = JSON.stringify(dataObj);
+  $.post("BrushData",jsonString, function(data,status){
+    console.log("data: "+data);
+    console.log("typeof: " + typeof data);
+  });
   paint(canvasX, canvasY);
 }
 

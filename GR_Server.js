@@ -4,7 +4,7 @@ var fs = require('fs'); //need to read static files
 var url = require('url');  //to parse url strings
 
 var counter = 1000; //to count invocations of function(req,res)
-
+var serverData;
 //var canvas=document.getElementById("canvas1");
 var ROOT_DIR = 'client'; //dir to serve static files from
 
@@ -75,6 +75,7 @@ var my_server = http.createServer(function(request, response) {
         console.log('received data object: ', dataObj);
         console.log('type: ', typeof dataObj);
         //handling the name input does it exist in the filename
+      if(dataObj.text != null){
         var filePath = "Users.txt"
         fs.readFile(filePath, function(err, data){
           if(err){
@@ -96,6 +97,17 @@ var my_server = http.createServer(function(request, response) {
             console.log('returning: ', returnObj);
             response.end(JSON.stringify(returnObj));//send the JSON
           });//end of readFile
+        }else{//process polling data
+          if(dataObj.canvasX != null && dataObj.canvasY!= null
+            && dataObj.brushSize!= null && dataObj.brushColour != null){
+              serverData = dataObj;
+              returnObj = JSON.stringify(serverData);
+              console.log('returning: ', returnObj);
+              response.end(returnObj);
+            }
+
+
+        }
       }
     });
 
