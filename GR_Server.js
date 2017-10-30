@@ -39,6 +39,11 @@ var my_server = http.createServer(function(request, response) {
   console.log("PATHNAME: " + urlObj.pathname);
   console.log("REQUEST: " + ROOT_DIR + urlObj.pathname);
   console.log("METHOD: " + request.method);
+  var receivedData = '';
+
+  request.on('data', function(chunk) {
+      receivedData += chunk;
+  });
 
   if(request.method == "GET"){
       //handle GET requests as static file requests
@@ -58,6 +63,41 @@ var my_server = http.createServer(function(request, response) {
           response.end(data);
       });
   }
+  request.on('end', function(){
+      console.log('received data: ', receivedData);
+      console.log('type: ', typeof receivedData);
+
+  if(request.method == "POST"){
+        var returnObj = 0;
+        var dataObj = null;
+        dataObj = JSON.parse(receivedData);
+        console.log("dataObj"+dataObj);
+        console.log('received data object: ', dataObj);
+        console.log('type: ', typeof dataObj);
+        //handling the name input does it exist in the filename
+        var filePath = "Users.txt"
+        fs.readFile(filePath, function(err, data){
+          if(err){
+            returnObj= 0;
+            console.log( "File not found");
+          }else{
+              if(data.includes('['+dataObj.text+']')){
+                console.log('User Found');
+                returnObj= 1;
+              }else{
+                fs.appendFile(filePath, '['+dataObj.text+'] ', function(err){
+                  if(err){
+                    console.log("Could not append name");
+                    }
+                  });
+                  returnObj = 2;
+              }
+            }
+            console.log('returning: ', returnObj);
+            response.end(JSON.stringify(returnObj));//send the JSON
+          });//end of readFile
+      }
+    });
 
 }).listen(3000);
 

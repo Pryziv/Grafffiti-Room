@@ -4,6 +4,7 @@
   <head>
     <title>Comp 2406 Assignment 2 - Collaborative Single Page App</title>
     <script src="functions.js"></script>
+    <script src="jquery-1.11.3.js"></script>
 
     <style>
       body {
@@ -31,7 +32,13 @@
       </head>
 
       <body>
+        <p1 id = 'paragraph1'></p1>
+        <input type = "text"  id="userTextField" name = "userTextField"  value="" size = "60" />
+        <input type="button" id='SubmitButton' value="Submit Request" onClick="handleSubmitButton()">
 
-        <canvas id = 'canvas1' class = 'canvas' width = '800' height='400'>
+<br>
+        <canvas id = 'canvas1' class = 'canvas' width = '800' height='400'
+        //onmousedown='handleMouseDown(event);'
+        ></canvas>
 
 </html>
