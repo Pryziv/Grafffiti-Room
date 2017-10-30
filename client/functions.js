@@ -1,7 +1,6 @@
 
 //functions file
 
-var pollingTimer=0;
 window.onload = function() {//Wait for page to load then do the following
   var canvas = document.getElementById('canvas1');
   var context = canvas.getContext('2d');
@@ -31,15 +30,6 @@ function paint(canvasX,canvasY){
   context.fillStyle = brushColour;
   context.fill();
 }
-
-function repaint(recanvasX,recanvasY,rebrushSize,rebrushColour){
-  //x0,y0,r0,x1,y1,r1
-  context.beginPath();
-  context.arc(recanvasX,recanvasY,rebrushSize,0,2*Math.PI);
-  context.fillStyle = rebrushColour;
-  context.fill();
-}
-
 function handleBrushColour(colourNum){
   if(colourNum == 0){
     brushColour = "red";
@@ -63,21 +53,6 @@ function handleBrushColour(colourNum){
 }
 function handleBrushSize(size){
   brushSize = size;
-}
-
-function pollingTimerHandler() {
-  //console.log("poll server");
-  var dataObj = { canvasX:-1, canvasY:-1, brushSize:-1, brushColour:"" }; //used by server to react as poll
-  //create a JSON string representation of the data object
-  var jsonString = JSON.stringify(dataObj);
-
-  //Poll the server for the location of the moving box
-  $.post("BrushData", jsonString, function(data, status) {
-    console.log("polldata: " + data);
-    console.log("polltypeof: " + typeof data);
-    var brushData = data;
-    repaint(data.canvasX,data.canvasY,data.brushSize,data.brushColour);
-  });
 }
 
 var handleMouseDown = function(e){
@@ -159,10 +134,3 @@ function handleSubmitButton () {
     });//end of $post
   }
 };
-
-$(document).ready(function() {
-  //add mouse down listener to our canvas object
-  $("#canvas1").mousedown(handleMouseDown);
-  pollingTimer = setInterval(pollingTimerHandler, 100); //quarter of a second
-  //timer.clearInterval(); //to stop
-});
