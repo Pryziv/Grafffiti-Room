@@ -1,10 +1,10 @@
 
 //functions file
-window.onload = function() {//Wait for page to load then do the following
-var canvas = document.getElementById('canvas1');
-var context = canvas.getContext('2d');
-var imageObj = new Image();
 
+window.onload = function() {//Wait for page to load then do the following
+  var canvas = document.getElementById('canvas1');
+  var context = canvas.getContext('2d');
+var imageObj = new Image();
 imageObj.onload = function() {//Wait for image to load then make the background
   context.drawImage(imageObj, 0, 0,800,400);
       };
@@ -14,8 +14,25 @@ imageObj.src ="images/Wall.jpg";
     document.getElementById('SubmitButton').style.display = "none";
     document.getElementById('paragraph1').innerHTML =
     'Welcome back '+sessionStorage.user;
+  }else{
+    document.getElementById('brushOptions').style.display = 'none';
   }
 };
+//globals
+var canvas = document.getElementById('canvas1');
+var context = canvas.getContext("2d");
+var brushColour = "#FF0000"; //red
+var brushSize = 10;
+var deltaX, deltaY;
+function paint( canvasX, canvasY){
+  //x0,y0,r0,x1,y1,r1
+  context.beginPath();
+  context.arc(canvasX,canvasY,brushSize,0,2*Math.PI);
+  context.fillStyle = brushColour;
+  context.fill();
+}
+function brushColour(){}
+function brushSize(){}
 
 var handleMouseDown = function(e){
   var canvas = document.getElementById('canvas1');
@@ -25,14 +42,15 @@ var handleMouseDown = function(e){
   console.log("mouse down:" + canvasX + ", " + canvasY);
   e.stopPropagation();
   e.preventDefault();
-  paint();
+  paint(canvasX, canvasY);
 }
 var handleMouseMove = function(e){
   console.log("mouse move");
   var canvasX = e.clientX - rect.left;
   var canvasY = e.clientY - rect.top;
+  paint(canvasX, canvasY);
   e.stopPropagation();
-  paint();
+
 }
 var handleMouseUp = function(e){
   console.log("mouse up");
@@ -41,6 +59,7 @@ var handleMouseUp = function(e){
     document.removeEventListener("mousemove", handleMouseMove, true);
 
 	e.stopPropagation();
+  paint();
 }
 
 function handleSubmitButton () {
@@ -67,6 +86,7 @@ function handleSubmitButton () {
 
         document.getElementById('userTextField').style.display = "none";
         document.getElementById('SubmitButton').style.display = "none";
+        document.getElementById('brushOptions').style.display ='';
         //store that its a user
         if(typeof(Storage) !== "undefined") {
           sessionStorage.user = userText;
