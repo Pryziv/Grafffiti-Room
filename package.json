@@ -1,9 +1,0 @@
-{
-    "name": "Graffiti-Rooms",
-    "version": "0.0.1",
-    "description": "App",
-    "dependencies": {
-        "socket.io": "^2.0.3"
-    },
-    "author": "Ilyas and Cameron"
-}
