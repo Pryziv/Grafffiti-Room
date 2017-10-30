@@ -21,18 +21,39 @@ imageObj.src ="images/Wall.jpg";
 //globals
 var canvas = document.getElementById('canvas1');
 var context = canvas.getContext("2d");
-var brushColour = "#FF0000"; //red
+var brushColour = "red"; //red
 var brushSize = 10;
-var deltaX, deltaY;
-function paint( canvasX, canvasY){
+function paint(canvasX,canvasY){
   //x0,y0,r0,x1,y1,r1
   context.beginPath();
   context.arc(canvasX,canvasY,brushSize,0,2*Math.PI);
   context.fillStyle = brushColour;
   context.fill();
 }
-function brushColour(){}
-function brushSize(){}
+function handleBrushColour(colourNum){
+  if(colourNum == 0){
+    brushColour = "red";
+  }else if(colourNum == 1){
+    brushColour = "orange";
+  }else if(colourNum == 2){
+    brushColour = "yellow";
+  }else if(colourNum == 3){
+    brushColour = "green";
+  }else if(colourNum == 4){
+    brushColour = "blue";
+  }else if(colourNum == 5){
+    brushColour = "purple";
+  }else if(colourNum == 6){
+    brushColour = "brown";
+  }else if(colourNum == 7){
+    brushColour = "black";
+  }else if(colourNum == 8){
+    brushColour = "white";
+  }
+}
+function handleBrushSize(size){
+  brushSize = size;
+}
 
 var handleMouseDown = function(e){
   var canvas = document.getElementById('canvas1');
@@ -40,18 +61,22 @@ var handleMouseDown = function(e){
   var canvasX = e.clientX - rect.left;
   var canvasY = e.clientY - rect.top;
   console.log("mouse down:" + canvasX + ", " + canvasY);
+  document.addEventListener("mousemove", handleMouseMove, true);
+    document.addEventListener("mouseup", handleMouseUp, true);
   e.stopPropagation();
   e.preventDefault();
   paint(canvasX, canvasY);
 }
+
 var handleMouseMove = function(e){
   console.log("mouse move");
+  var rect = canvas.getBoundingClientRect();
   var canvasX = e.clientX - rect.left;
   var canvasY = e.clientY - rect.top;
-  paint(canvasX, canvasY);
   e.stopPropagation();
-
+  paint(canvasX, canvasY);
 }
+
 var handleMouseUp = function(e){
   console.log("mouse up");
 
@@ -59,7 +84,6 @@ var handleMouseUp = function(e){
     document.removeEventListener("mousemove", handleMouseMove, true);
 
 	e.stopPropagation();
-  paint();
 }
 
 function handleSubmitButton () {
