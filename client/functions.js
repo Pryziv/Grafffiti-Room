@@ -24,6 +24,7 @@ var canvas = document.getElementById('canvas1');
 var context = canvas.getContext("2d");
 var brushColour = "red"; //red
 var brushSize = 10;
+
 function paint(canvasX,canvasY){
   //x0,y0,r0,x1,y1,r1
   context.beginPath();
@@ -32,11 +33,14 @@ function paint(canvasX,canvasY){
   context.fill();
 }
 
-function repaint(recanvasX,recanvasY,rebrushSize,rebrushColour){
+function repaint(corx, cory,
+size, colour){
   //x0,y0,r0,x1,y1,r1
+  console.log(corx);
+  console.log("repainting at: "+corx+ cory)
   context.beginPath();
-  context.arc(recanvasX,recanvasY,rebrushSize,0,2*Math.PI);
-  context.fillStyle = rebrushColour;
+  context.arc(corx,cory,size,0,2*Math.PI);
+  context.fillStyle = colour;
   context.fill();
 }
 
@@ -67,16 +71,17 @@ function handleBrushSize(size){
 
 function pollingTimerHandler() {
   //console.log("poll server");
-  var dataObj = { canvasX:-1, canvasY:-1, brushSize:-1, brushColour:"" }; //used by server to react as poll
+  var dataObj = {corx: -1, cory: -1,size: 0, colour: brushColour}; //used by server to react as poll
   //create a JSON string representation of the data object
-  var jsonString = JSON.stringify(dataObj);
+  var brushJson = JSON.stringify(dataObj);
 
   //Poll the server for the location of the moving box
-  $.post("BrushData", jsonString, function(data, status) {
-    console.log("polldata: " + data);
-    console.log("polltypeof: " + typeof data);
-    var brushData = data;
-    repaint(data.canvasX,data.canvasY,data.brushSize,data.brushColour);
+  $.post("BrushData", brushJson, function(data, status) {
+    console.log("Poll popped");
+    var brushData = JSON.parse(data)
+    console.log(brushData);
+    repaint(brushData.corx, brushData.cory,
+      brushData.size, brushData.colour);
   });
 }
 
@@ -90,11 +95,10 @@ var handleMouseDown = function(e){
     document.addEventListener("mouseup", handleMouseUp, true);
   e.stopPropagation();
   e.preventDefault();
-  var dataObj = {canvasX, canvasY,brushSize,brushColour};
-  var jsonString = JSON.stringify(dataObj);
-  $.post("BrushData",jsonString, function(data,status){
-    console.log("data: "+data);
-    console.log("typeof: " + typeof data);
+  var dataObj = {corx: canvasX, cory: canvasY,size: brushSize, colour: brushColour};
+  var brushJson = JSON.stringify(dataObj);
+  $.post("BrushData",brushJson, function(data,status){
+    console.log("Data for repainting: "+data);
   })
   paint(canvasX, canvasY);
 }
@@ -105,11 +109,10 @@ var handleMouseMove = function(e){
   var canvasX = e.clientX - rect.left;
   var canvasY = e.clientY - rect.top;
   e.stopPropagation();
-  var dataObj = {canvasX, canvasY,brushSize,brushColour};
-  var jsonString = JSON.stringify(dataObj);
-  $.post("BrushData",jsonString, function(data,status){
-    console.log("data: "+data);
-    console.log("typeof: " + typeof data);
+  var dataObj = {corx: canvasX, cory: canvasY,size: brushSize, colour: brushColour};
+  var brushJson = JSON.stringify(dataObj);
+  $.post("BrushData",brushJson, function(data,status){
+    console.log("Data for repainting: "+data);
   });
   paint(canvasX, canvasY);
 }
@@ -163,6 +166,6 @@ function handleSubmitButton () {
 $(document).ready(function() {
   //add mouse down listener to our canvas object
   $("#canvas1").mousedown(handleMouseDown);
-  pollingTimer = setInterval(pollingTimerHandler, 100); //quarter of a second
+  pollingTimer = setInterval(pollingTimerHandler, 300); //quarter of a second
   //timer.clearInterval(); //to stop
 });
