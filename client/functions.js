@@ -18,12 +18,16 @@ imageObj.src ="images/Wall.jpg";
   }else{
     document.getElementById('brushOptions').style.display = 'none';
   }
+  if(sessionStorage.admin == 1){
+    document.getElementById('adminInput').style.display = 'none';
+    document.getElementById('adminControls').style.display = '';
+  }
 };
 //globals
 var canvas = document.getElementById('canvas1');
 var context = canvas.getContext("2d");
 var brushColour = "red"; //red
-var brushSize = 10;
+var brushSize = 0;
 
 function paint(canvasX,canvasY){
   //x0,y0,r0,x1,y1,r1
@@ -33,15 +37,18 @@ function paint(canvasX,canvasY){
   context.fill();
 }
 
-function repaint(corx, cory,
-size, colour){
-  //x0,y0,r0,x1,y1,r1
+function repaint(corx, cory, size, colour){
   console.log(corx);
   console.log("repainting at: "+corx+ cory)
   context.beginPath();
   context.arc(corx,cory,size,0,2*Math.PI);
   context.fillStyle = colour;
   context.fill();
+}
+
+function handleFillWall(){
+  context.fillStyle = brushColour;
+  context.fillRect(0,0,800,400);
 }
 
 function handleBrushColour(colourNum){
@@ -80,8 +87,9 @@ function pollingTimerHandler() {
     console.log("Poll popped");
     var brushData = JSON.parse(data)
     console.log(brushData);
-    repaint(brushData.corx, brushData.cory,
-      brushData.size, brushData.colour);
+    for(var i=0;i<brushData.length;i++){
+    repaint(brushData[i].corx, brushData[i].cory,
+      brushData[i].size, brushData[i].colour);}
   });
 }
 
@@ -162,10 +170,32 @@ function handleSubmitButton () {
     });//end of $post
   }
 };
+function handleAdminButton(){
+  var adminText = $('#adminField').val();
+  if(adminText && adminText != ''){
+    var userRequestObj = {text: adminField}; //make object to send to server
+    var userRequestJSON = JSON.stringify(userRequestObj); //make json string
+    $('adminField').val('');
+    $.post('adminField',userRequestJSON,function(data, status){
+      var responseObj = JSON.parse(data);
+      if(responseObj == 3){
+        if(typeof(Storage) !== "undefined") {
+        sessionStorage.admin = 1;}else{
+          console.log("Storage not available");
+        }
+        document.getElementById('adminInput').style.display = 'none';
+        document.getElementById('adminControls').style.display = '';
+      }else{
+        document.getElementById("AdminPara").innerHTML =
+        "Incorrect Password Access denied";
+      }
+    });//postend
+  }
+};
 
 $(document).ready(function() {
   //add mouse down listener to our canvas object
   $("#canvas1").mousedown(handleMouseDown);
-  pollingTimer = setInterval(pollingTimerHandler, 300); //quarter of a second
+  pollingTimer = setInterval(pollingTimerHandler, 100); //quarter of a second
   //timer.clearInterval(); //to stop
 });

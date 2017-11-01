@@ -47,6 +47,16 @@
         <canvas id = 'canvas1' class = 'canvas' width = '800' height='400'
         //onmousedown='handleMouseDown(event);'
         ></canvas>
+<br>
+<div id='adminInput'>
+  <p id='AdminPara'>Request Admin Controls</p>
+  <input type = "text"  id="adminField" name = "adminField"  value="" size = "20" />
+  <input type="button" id='adminButton' value="Submit Request" onClick="handleAdminButton()">
+</div>
+<div id="adminControls">
+  <input type = "button" id="clearBoard" value = "clearBoard" onClick = "handleClearBoard()">
+  <input type = "button" id="fillWall" value = "fillWall" onClick = "handleFillWall()">
+</div>
         <script src="functions.js"></script>
 
 </html>
