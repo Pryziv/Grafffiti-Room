@@ -38,10 +38,10 @@ var get_mime = function(filename) {
 
 var my_server = http.createServer(function(request, response) {
   var urlObj = url.parse(request.url, true, false);
-  console.log('\n============================');
-  console.log("PATHNAME: " + urlObj.pathname);
-  console.log("REQUEST: " + ROOT_DIR + urlObj.pathname);
-  console.log("METHOD: " + request.method);
+  //console.log('\n============================');
+  //console.log("PATHNAME: " + urlObj.pathname);
+  //console.log("REQUEST: " + ROOT_DIR + urlObj.pathname);
+  //console.log("METHOD: " + request.method);
   var receivedData = '';
 
   request.on('data', function(chunk) {
@@ -56,7 +56,7 @@ var my_server = http.createServer(function(request, response) {
       fs.readFile(filePath, function(err,data){
           if(err){
               //report error to console
-              console.log('ERROR: ' + JSON.stringify(err));
+              //console.log('ERROR: ' + JSON.stringify(err));
               //respond with not found 404 to client
               response.writeHead(404);
               response.end(JSON.stringify(err));
@@ -67,38 +67,39 @@ var my_server = http.createServer(function(request, response) {
       });
   }
   request.on('end', function(){
-      console.log('received data: ', receivedData);
-      console.log('type: ', typeof receivedData);
+      //console.log('received data: ', receivedData);
+      //console.log('type: ', typeof receivedData);
 
   if(request.method == "POST"){
         var returnObj = 0;
         var dataObj = null;
         dataObj = JSON.parse(receivedData);
-        console.log('received data object: ', dataObj);
-        console.log('type: ', typeof dataObj);
+        //console.log('received data object: ', dataObj);
+        //console.log('type: ', typeof dataObj);
         //handling the name input does it exist in the filename
       if(dataObj.text != null){
-        mod1.signInHandler(dataObj,returnObj);
+        console.log('returned: '+mod1.signInHandler(dataObj));
+        response.end(JSON.stringify(mod1.signInHandler(dataObj)));
         // var filePath = "Users.txt"
         // fs.readFile(filePath, function(err, data){
         //   if(err){
         //     returnObj= 0;
-        //     console.log( "File not found");
+        //     //console.log( "File not found");
         //   }else{
         //       if(data.includes('['+dataObj.text+']')){
-        //         console.log('User Found');
+                      //console.log('User Found');
         //         returnObj= 1;
         //       }else{
         //         fs.appendFile(filePath, '['+dataObj.text+'] ', function(err){
         //           if(err){
-        //             console.log("Could not append name");
+        //             //console.log("Could not append name");
         //             }
         //           });
         //           returnObj = 2;
         //       }
         //     }
-        //     console.log('returning: ', returnObj);
-        //     response.end(JSON.stringify(returnObj));//send the JSON
+            // console.log('returning: ', returnObj);
+            // response.end(JSON.stringify(returnObj));//send the JSON
         //   });//end of readFile
         }else if(dataObj.corx != null){//process polling data
           if(dataObj.corx > 0 && dataObj.cory > 0
@@ -107,18 +108,18 @@ var my_server = http.createServer(function(request, response) {
               while(serverData.length>200){
               serverData.shift();
               }
-              console.log('none Blank received');
+              //console.log('none Blank received');
             }
             returnObj = JSON.stringify(serverData);
-            console.log('returned: ', returnObj);
+            //console.log('returned: ', returnObj);
             response.end(returnObj);
 
         }else{
-          console.log('Nothing done');
+          //console.log('Nothing done');
         }
       }
     });
 
 }).listen(3000);
 
-console.log('Server Running at http://127.0.0.1:3000  CNTL-C to quit');
+//console.log('Server Running at http://127.0.0.1:3000  CNTL-C to quit');
