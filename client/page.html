@@ -15,7 +15,7 @@
     margin-left: auto;
     margin-right: auto;
     display: block;
-    width: 800px;
+    width: 1200px;
 }
       .canvas {
         background: #ffffff;
@@ -23,30 +23,54 @@
       }
       #canvas1 {}
         </style>
+        <center><header style ="font-size: 300%">Grafffiti-Room</header></center>
       </head>
-
       <body>
-        <p1 id = 'paragraph1'></p1>
+        <p1 id = 'paragraph1' style="font-size: 120%; font-family:verdana; text-align: left" ></p1>
         <input type = "text"  id="userTextField" name = "userTextField"  value="" size = "60" />
         <input type="button" id='SubmitButton' value="Submit Request" onClick="handleSubmitButton()">
-
-<br><div id='brushOptions'>
-<input type ="button" id="smallBrushButton" value = "Small Brush" onClick = "handleBrushSize(5)">
-<input type ="button" id="mediumBrushButton" value = "Medium Brush" onClick = "handleBrushSize(10)">
-<input type ="button" id="largeBrushButton" value = "Large Brush" onClick = "handleBrushSize(20)"><br>
-<input type ="button" id="redButton" value = "Red" onClick = "handleBrushColour(0)">
-<input type ="button" id="orangeButton" value = "Orange" onClick = "handleBrushColour(1)">
-<input type ="button" id="yellowBrushButton" value = "Yellow" onClick = "handleBrushColour(2)"><br>
-<input type ="button" id="greenBrushButton" value = "Green" onClick = "handleBrushColour(3)">
-<input type ="button" id="blueBrushButton" value = "Blue" onClick = "handleBrushColour(4)">
-<input type ="button" id="purpleBrushButton" value = "Purple" onClick = "handleBrushColour(5)"><br>
-<input type ="button" id="brownBrushButton" value = "Brown" onClick = "handleBrushColour(6)">
-<input type ="button" id="blackBrushButton" value = "Black" onClick = "handleBrushColour(7)">
-<input type ="button" id="whiteBrushButton" value = "White" onClick = "handleBrushColour(8)"><br>
+<br>
+<style>
+table, th{
+  border: 1px solid black;
+  font-size: 120%;
+}
+td{
+  width: auto;
+  height: auto;
+}
+</style>
+<section>
+<div id ="brushOptions" >
+<table id='brushSizes'>
+  <tr>
+    <th>Brush Sizes</th>
+    <th colspan="3">Brush Colours</th>
+  </tr>
+  <tr>
+    <td><input type ="button" id="smallBrushButton" value = "Small" onClick = "handleBrushSize(5)"></td>
+    <td><input type ="button" id="redButton" value = "Red" onClick = "handleBrushColour(0)"></td>
+    <td><input type ="button" id="orangeButton" value = "Orange" onClick = "handleBrushColour(1)"></td>
+    <td><input type ="button" id="yellowBrushButton" value = "Yellow" onClick = "handleBrushColour(2)"></td>
+    </tr>
+  <tr>
+    <td><input type ="button" id="mediumBrushButton" value = "Medium" onClick = "handleBrushSize(10)"></td>
+    <td><input type ="button" id="greenBrushButton" value = "Green" onClick = "handleBrushColour(3)"></td>
+    <td><input type ="button" id="blueBrushButton" value = "Blue" onClick = "handleBrushColour(4)"></td>
+    <td><input type ="button" id="purpleBrushButton" value = "Purple" onClick = "handleBrushColour(5)"></td>
+  </tr>
+  <tr>
+    <td><input type ="button" id="largeBrushButton" value = "Large" onClick = "handleBrushSize(20)"></td>
+    <td><input type ="button" id="brownBrushButton" value = "Brown" onClick = "handleBrushColour(6)"></td>
+    <td><input type ="button" id="blackBrushButton" value = "Black" onClick = "handleBrushColour(7)"></td>
+    <td><input type ="button" id="whiteBrushButton" value = "White" onClick = "handleBrushColour(8)"></td>
+  </tr>
+</table>
 </div>
-        <canvas id = 'canvas1' class = 'canvas' width = '800' height='400'
-        //onmousedown='handleMouseDown(event);'
-        ></canvas>
+</section>
+<aside>
+        <canvas id = 'canvas1' class = 'canvas' width = '1200' height='600' onmousedown='handleMouseDown(event);'>
+      </canvas>
         <script src="functions.js"></script>
-
+</aside>
 </html>
