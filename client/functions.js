@@ -7,7 +7,7 @@ window.onload = function() {//Wait for page to load then do the following
   var context = canvas.getContext('2d');
 var imageObj = new Image();
 imageObj.onload = function() {//Wait for image to load then make the background
-  context.drawImage(imageObj, 0, 0,800,400);
+  context.drawImage(imageObj, 0, 0,1200,600);
       };
 imageObj.src ="images/Wall.jpg";
   if(sessionStorage.active == 1){
@@ -35,8 +35,6 @@ function paint(canvasX,canvasY){
 
 function repaint(corx, cory, size, colour){
   //x0,y0,r0,x1,y1,r1
-  console.log(corx);
-  console.log("repainting at: "+corx+ cory)
   context.beginPath();
   context.arc(corx,cory,size,0,2*Math.PI);
   context.fillStyle = colour;
@@ -78,7 +76,6 @@ function pollingTimerHandler() {
   $.post("BrushData", brushJson, function(data, status) {
     console.log("Poll popped");
     var brushData = JSON.parse(data)
-    console.log(brushData);
     for(var i=0;i<brushData.length;i++){
       repaint(brushData[i].corx, brushData[i].cory,
       brushData[i].size, brushData[i].colour);}
@@ -98,7 +95,7 @@ var handleMouseDown = function(e){
   var dataObj = {corx: canvasX, cory: canvasY,size: brushSize, colour: brushColour};
   var brushJson = JSON.stringify(dataObj);
   $.post("BrushData",brushJson, function(data,status){
-    console.log("Data for repainting: "+data);
+    console.log("brushData sent");
   })
   paint(canvasX, canvasY);
 }
@@ -112,7 +109,7 @@ var handleMouseMove = function(e){
   var dataObj = {corx: canvasX, cory: canvasY,size: brushSize, colour: brushColour};
   var brushJson = JSON.stringify(dataObj);
   $.post("BrushData",brushJson, function(data,status){
-    console.log("Data for repainting: "+data);
+      console.log("brushData sent");
   });
   paint(canvasX, canvasY);
 }

@@ -73,10 +73,9 @@ var my_server = http.createServer(function(request, response) {
         var returnObj = 0;
         var dataObj = null;
         dataObj = JSON.parse(receivedData);
-        console.log('received data object: ', dataObj);
-        console.log('type: ', typeof dataObj);
         //handling the name input does it exist in the filename
       if(dataObj.text != null){
+        console.log("Text Data received")
         var filePath = "Users.txt"
         fs.readFile(filePath, function(err, data){
           if(err){
@@ -92,10 +91,12 @@ var my_server = http.createServer(function(request, response) {
                     console.log("Could not append name");
                     }
                   });
+                  console.log("User Appended")
                   returnObj = 2;
               }
             }
             console.log('returning: ', returnObj);
+            console.log('============================\n')
             response.end(JSON.stringify(returnObj));//send the JSON
           });//end of readFile
         }else if(dataObj.corx != null){//process polling data
@@ -105,11 +106,12 @@ var my_server = http.createServer(function(request, response) {
               while(serverData.length>200){
               serverData.shift();
               }
-              console.log('none Blank received');
+              console.log('BrushData received');
             }
             returnObj = JSON.stringify(serverData);
-            console.log('returned: ', returnObj);
+            console.log('returning serverData ');
             response.end(returnObj);
+            console.log('============================\n')
 
         }else{
           console.log('Nothing done');
