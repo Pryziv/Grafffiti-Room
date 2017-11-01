@@ -23,7 +23,7 @@ imageObj.src ="images/Wall.jpg";
 var canvas = document.getElementById('canvas1');
 var context = canvas.getContext("2d");
 var brushColour = "red"; //red
-var brushSize = 10;
+var brushSize = 0;
 
 function paint(canvasX,canvasY){
   //x0,y0,r0,x1,y1,r1
@@ -33,8 +33,7 @@ function paint(canvasX,canvasY){
   context.fill();
 }
 
-function repaint(corx, cory,
-size, colour){
+function repaint(corx, cory, size, colour){
   //x0,y0,r0,x1,y1,r1
   console.log(corx);
   console.log("repainting at: "+corx+ cory)
@@ -80,8 +79,9 @@ function pollingTimerHandler() {
     console.log("Poll popped");
     var brushData = JSON.parse(data)
     console.log(brushData);
-    repaint(brushData.corx, brushData.cory,
-      brushData.size, brushData.colour);
+    for(var i=0;i<brushData.length;i++){
+      repaint(brushData[i].corx, brushData[i].cory,
+      brushData[i].size, brushData[i].colour);}
   });
 }
 
@@ -166,6 +166,6 @@ function handleSubmitButton () {
 $(document).ready(function() {
   //add mouse down listener to our canvas object
   $("#canvas1").mousedown(handleMouseDown);
-  pollingTimer = setInterval(pollingTimerHandler, 300); //quarter of a second
+  pollingTimer = setInterval(pollingTimerHandler, 100); //quarter of a second
   //timer.clearInterval(); //to stop
 });
