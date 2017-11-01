@@ -3,9 +3,9 @@ var http = require('http'); //need to http
 var fs = require('fs'); //need to read static files
 var url = require('url');  //to parse url strings
 
-
 var counter = 1000; //to count invocations of function(req,res)
-
+//will be over-written
+var serverData = {corx: -1, cory: -1,size: 0, colour: "red"};
 //var canvas=document.getElementById("canvas1");
 var ROOT_DIR = 'client'; //dir to serve static files from
 
@@ -72,10 +72,10 @@ var my_server = http.createServer(function(request, response) {
         var returnObj = 0;
         var dataObj = null;
         dataObj = JSON.parse(receivedData);
-        console.log("dataObj"+dataObj);
         console.log('received data object: ', dataObj);
         console.log('type: ', typeof dataObj);
         //handling the name input does it exist in the filename
+      if(dataObj.text != null){
         var filePath = "Users.txt"
         fs.readFile(filePath, function(err, data){
           if(err){
@@ -97,11 +97,22 @@ var my_server = http.createServer(function(request, response) {
             console.log('returning: ', returnObj);
             response.end(JSON.stringify(returnObj));//send the JSON
           });//end of readFile
+        }else if(dataObj.corx != null){//process polling data
+          if(dataObj.corx > 0 && dataObj.cory > 0
+            && dataObj.size > 0){
+              serverData = JSON.parse(receivedData);;
+              console.log('none Blank received');
+            }
+            returnObj = JSON.stringify(serverData);
+            console.log('returned: ', returnObj);
+            response.end(returnObj);
+
+        }else{
+          console.log('Nothing done');
+        }
       }
     });
 
 }).listen(3000);
-
-
 
 console.log('Server Running at http://127.0.0.1:3000  CNTL-C to quit');
