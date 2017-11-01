@@ -5,7 +5,8 @@ var url = require('url');  //to parse url strings
 
 var counter = 1000; //to count invocations of function(req,res)
 //will be over-written
-var serverData = {corx: -1, cory: -1,size: 0, colour: "red"};
+var serverData=[];
+serverData[0] = [{corx: -1, cory: -1,size: 0, colour: "red"}];
 //var canvas=document.getElementById("canvas1");
 var ROOT_DIR = 'client'; //dir to serve static files from
 
@@ -100,7 +101,10 @@ var my_server = http.createServer(function(request, response) {
         }else if(dataObj.corx != null){//process polling data
           if(dataObj.corx > 0 && dataObj.cory > 0
             && dataObj.size > 0){
-              serverData = JSON.parse(receivedData);;
+              serverData.push(JSON.parse(receivedData));
+              while(serverData.length>200){
+              serverData.shift();
+              }
               console.log('none Blank received');
             }
             returnObj = JSON.stringify(serverData);
