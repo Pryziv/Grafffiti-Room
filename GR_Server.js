@@ -2,6 +2,7 @@
 var http = require('http'); //need to http
 var fs = require('fs'); //need to read static files
 var url = require('url');  //to parse url strings
+var mod1 = require('./signInModule')//to handle signing into the server
 
 var counter = 1000; //to count invocations of function(req,res)
 //will be over-written
@@ -77,27 +78,28 @@ var my_server = http.createServer(function(request, response) {
         console.log('type: ', typeof dataObj);
         //handling the name input does it exist in the filename
       if(dataObj.text != null){
-        var filePath = "Users.txt"
-        fs.readFile(filePath, function(err, data){
-          if(err){
-            returnObj= 0;
-            console.log( "File not found");
-          }else{
-              if(data.includes('['+dataObj.text+']')){
-                console.log('User Found');
-                returnObj= 1;
-              }else{
-                fs.appendFile(filePath, '['+dataObj.text+'] ', function(err){
-                  if(err){
-                    console.log("Could not append name");
-                    }
-                  });
-                  returnObj = 2;
-              }
-            }
-            console.log('returning: ', returnObj);
-            response.end(JSON.stringify(returnObj));//send the JSON
-          });//end of readFile
+        mod1.signInHandler(dataObj,returnObj);
+        // var filePath = "Users.txt"
+        // fs.readFile(filePath, function(err, data){
+        //   if(err){
+        //     returnObj= 0;
+        //     console.log( "File not found");
+        //   }else{
+        //       if(data.includes('['+dataObj.text+']')){
+        //         console.log('User Found');
+        //         returnObj= 1;
+        //       }else{
+        //         fs.appendFile(filePath, '['+dataObj.text+'] ', function(err){
+        //           if(err){
+        //             console.log("Could not append name");
+        //             }
+        //           });
+        //           returnObj = 2;
+        //       }
+        //     }
+        //     console.log('returning: ', returnObj);
+        //     response.end(JSON.stringify(returnObj));//send the JSON
+        //   });//end of readFile
         }else if(dataObj.corx != null){//process polling data
           if(dataObj.corx > 0 && dataObj.cory > 0
             && dataObj.size > 0){
