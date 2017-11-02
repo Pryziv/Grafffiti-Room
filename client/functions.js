@@ -122,7 +122,11 @@ var handleMouseUp = function(e){
 
 	e.stopPropagation();
 }
-
+function handleAdminCheck(){
+  var admin = {admin: 1};
+  var adminJson = JSON.stringify(admin);
+  $.post('adminValue',adminJson);
+}
 function handleSubmitButton () {
   var userText = $('#userTextField').val(); //get text from user text input field
   if(userText && userText != ''){ //user text was not empty

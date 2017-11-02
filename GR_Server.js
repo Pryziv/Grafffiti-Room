@@ -68,14 +68,14 @@ var my_server = http.createServer(function(request, response) {
   }
   request.on('end', function(){
       console.log('received data: ', receivedData);
-      /console.log('type: ', typeof receivedData);
+      console.log('type: ', typeof receivedData);
 
   if(request.method == "POST"){
         var returnObj = 0;
         var dataObj = null;
         dataObj = JSON.parse(receivedData);
         //handling the name input does it exist in the filename
-        if(dataObj.admin!=null){
+        if(dataObj.admin != null){
           mod1.dataDisplay(serverData);
         }
       if(dataObj.text != null){

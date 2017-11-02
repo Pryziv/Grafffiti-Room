@@ -1,5 +1,5 @@
 exports.dataDisplay= function(serverData){
-  for(i < serverData.length){
+  for(var i=0;i < serverData.length;i++){
     console.log(serverData[i]);
   }
 }
