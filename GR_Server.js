@@ -2,7 +2,7 @@
 var http = require('http'); //need to http
 var fs = require('fs'); //need to read static files
 var url = require('url');  //to parse url strings
-var mod1 = require('./signInModule')//to handle signing into the server
+var mod1 = require('./adminCheck')//for the function dataDisplay
 
 var counter = 1000; //to count invocations of function(req,res)
 //will be over-written
@@ -67,40 +67,43 @@ var my_server = http.createServer(function(request, response) {
       });
   }
   request.on('end', function(){
-      //console.log('received data: ', receivedData);
-      //console.log('type: ', typeof receivedData);
+      console.log('received data: ', receivedData);
+      /console.log('type: ', typeof receivedData);
 
   if(request.method == "POST"){
         var returnObj = 0;
         var dataObj = null;
         dataObj = JSON.parse(receivedData);
-        //console.log('received data object: ', dataObj);
-        //console.log('type: ', typeof dataObj);
+        console.log('received data object: ', dataObj);
+        console.log('type: ', typeof dataObj);
         //handling the name input does it exist in the filename
+        if(dataObj.admin!=null){
+          mod1.dataDisplay(serverData);
+        }
       if(dataObj.text != null){
         console.log('returned: '+mod1.signInHandler(dataObj));
         response.end(JSON.stringify(mod1.signInHandler(dataObj)));
-        // var filePath = "Users.txt"
-        // fs.readFile(filePath, function(err, data){
-        //   if(err){
-        //     returnObj= 0;
-        //     //console.log( "File not found");
-        //   }else{
-        //       if(data.includes('['+dataObj.text+']')){
-                      //console.log('User Found');
-        //         returnObj= 1;
-        //       }else{
-        //         fs.appendFile(filePath, '['+dataObj.text+'] ', function(err){
-        //           if(err){
-        //             //console.log("Could not append name");
-        //             }
-        //           });
-        //           returnObj = 2;
-        //       }
-        //     }
-            // console.log('returning: ', returnObj);
-            // response.end(JSON.stringify(returnObj));//send the JSON
-        //   });//end of readFile
+        var filePath = "Users.txt"
+        fs.readFile(filePath, function(err, data){
+          if(err){
+            returnObj= 0;
+            //console.log( "File not found");
+          }else{
+              if(data.includes('['+dataObj.text+']')){
+                      console.log('User Found');
+                returnObj= 1;
+              }else{
+                fs.appendFile(filePath, '['+dataObj.text+'] ', function(err){
+                  if(err){
+                    //console.log("Could not append name");
+                    }
+                  });
+                  returnObj = 2;
+              }
+            }
+            console.log('returning: ', returnObj);
+            response.end(JSON.stringify(returnObj));//send the JSON
+          });//end of readFile
         }else if(dataObj.corx != null){//process polling data
           if(dataObj.corx > 0 && dataObj.cory > 0
             && dataObj.size > 0){
