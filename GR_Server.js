@@ -2,6 +2,7 @@
 var http = require('http'); //need to http
 var fs = require('fs'); //need to read static files
 var url = require('url');  //to parse url strings
+var mod1 = require('./adminCheck')//for the function dataDisplay
 
 var counter = 1000; //to count invocations of function(req,res)
 //will be over-written
@@ -37,10 +38,10 @@ var get_mime = function(filename) {
 
 var my_server = http.createServer(function(request, response) {
   var urlObj = url.parse(request.url, true, false);
-  console.log('\n============================');
-  console.log("PATHNAME: " + urlObj.pathname);
-  console.log("REQUEST: " + ROOT_DIR + urlObj.pathname);
-  console.log("METHOD: " + request.method);
+  //console.log('\n============================');
+  //console.log("PATHNAME: " + urlObj.pathname);
+  //console.log("REQUEST: " + ROOT_DIR + urlObj.pathname);
+  //console.log("METHOD: " + request.method);
   var receivedData = '';
 
   request.on('data', function(chunk) {
@@ -55,7 +56,7 @@ var my_server = http.createServer(function(request, response) {
       fs.readFile(filePath, function(err,data){
           if(err){
               //report error to console
-              console.log('ERROR: ' + JSON.stringify(err));
+              //console.log('ERROR: ' + JSON.stringify(err));
               //respond with not found 404 to client
               response.writeHead(404);
               response.end(JSON.stringify(err));
@@ -67,28 +68,31 @@ var my_server = http.createServer(function(request, response) {
   }
   request.on('end', function(){
       console.log('received data: ', receivedData);
-      console.log('type: ', typeof receivedData);
+      /console.log('type: ', typeof receivedData);
 
   if(request.method == "POST"){
         var returnObj = 0;
         var dataObj = null;
         dataObj = JSON.parse(receivedData);
         //handling the name input does it exist in the filename
+        if(dataObj.admin!=null){
+          mod1.dataDisplay(serverData);
+        }
       if(dataObj.text != null){
         console.log("Text Data received")
         var filePath = "Users.txt"
         fs.readFile(filePath, function(err, data){
           if(err){
             returnObj= 0;
-            console.log( "File not found");
+            //console.log( "File not found");
           }else{
               if(data.includes('['+dataObj.text+']')){
-                console.log('User Found');
+                      console.log('User Found');
                 returnObj= 1;
               }else{
                 fs.appendFile(filePath, '['+dataObj.text+'] ', function(err){
                   if(err){
-                    console.log("Could not append name");
+                    //console.log("Could not append name");
                     }
                   });
                   console.log("User Appended")
@@ -106,6 +110,7 @@ var my_server = http.createServer(function(request, response) {
               while(serverData.length>200){
               serverData.shift();
               }
+
               console.log('BrushData received');
             }
             returnObj = JSON.stringify(serverData);
@@ -114,11 +119,11 @@ var my_server = http.createServer(function(request, response) {
             console.log('============================\n')
 
         }else{
-          console.log('Nothing done');
+          //console.log('Nothing done');
         }
       }
     });
 
 }).listen(3000);
 
-console.log('Server Running at http://127.0.0.1:3000  CNTL-C to quit');
+//console.log('Server Running at http://127.0.0.1:3000  CNTL-C to quit');
